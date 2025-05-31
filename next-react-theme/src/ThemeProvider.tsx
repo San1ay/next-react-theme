@@ -1,16 +1,17 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import React from "react";
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { setToLS, getFromLS } from "./utils";
 import type { ThemeContextType } from "./types";
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+export const ThemeProvider = ({ children, colorScheme = false }: { children: ReactNode; colorScheme: boolean }) => {
   const [theme, setThemeState] = useState<string | null>(null);
   const [color, setColorState] = useState<string | null>(null);
 
-  // Initialize theme and color on mount
+  // Initialize theme on mount
   useEffect(() => {
     const savedTheme = getFromLS("theme");
     if (savedTheme) {
@@ -20,11 +21,13 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       setThemeState(prefersDark ? "dark" : "light");
     }
 
-    const savedColor = getFromLS("color");
-    if (savedColor) {
-      setColorState(savedColor);
-    } else {
-      setColorState(savedTheme === "dark" ? "red" : "green");
+    if (colorScheme) {
+      const savedColor = getFromLS("color");
+      if (savedColor) {
+        setColorState(savedColor);
+      } else {
+        setColorState(savedTheme === "dark" ? "red" : "green");
+      }
     }
   }, []);
 
@@ -37,22 +40,27 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   // Side effects when color changes
   useEffect(() => {
-    if (color === null) return;
+    if (!colorScheme || color === null) return;
     document.documentElement.setAttribute("data-color", color);
     setToLS("color", color);
-  }, [color]);
+  }, [color, colorScheme]);
 
   // Expose setters that just update state, side effects handled by effects
   const setTheme = (newTheme: string) => setThemeState(newTheme);
-  const setColor = (newColor: string) => setColorState(newColor);
+  const setColor = colorScheme ? (newColor: string) => setColorState(newColor) : undefined;
 
-  if (theme === null || color === null) {
-    // prevent flash: wait for initial theme/color load
+  if (theme === null || (colorScheme && color === null)) {
     return null;
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, color, setColor }}>
+    <ThemeContext.Provider
+      value={{
+        theme,
+        setTheme,
+        ...(colorScheme ? { color, setColor } : {}),
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );

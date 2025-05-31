@@ -1,0 +1,54 @@
+{
+  "name": "next-react-theme",
+  "version": "0.1.0",
+  "description": "A flexible theme provider for Next.js and react applications",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "prepublish": "pnpm build",
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "react",
+    "nextjs",
+    "theme",
+    "dark-mode",
+    "light-mode",
+    "next-theme",
+    "react-theme",
+    "theme-provider"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/San1ay/next-react-theme.git"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.23",
+    "@types/react-dom": "^18.3.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.2.0",
+    "tsup": "8.5.0"
+  },
+  "peerDependencies": {
+    "react": "^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc",
+    "react-dom": "^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

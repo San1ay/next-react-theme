@@ -1,17 +1,6 @@
 {
-  "compilerOptions": {
-    "target": "es2020",               
-    "module": "esnext",                
-    "jsx": "react-jsx",              
-    "strict": true,                   
-    "esModuleInterop": true,           
-    "skipLibCheck": true,             
-    "forceConsistentCasingInFileNames": true,
-    "declaration": true,              
-    "emitDeclarationOnly": true,      
-    "outDir": "./dist",               
-    "rootDir": "./src"                
-  },
-  "include": ["next-themes/*.tsx"], 
-  "exclude": ["node_modules"]
+  "files": [],
+  "references": [
+    { "path": "react-next-theme" }
+  ]
 }
