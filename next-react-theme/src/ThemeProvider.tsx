@@ -7,7 +7,7 @@ import type { ThemeContextType } from "./types";
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider = ({ children, colorScheme = false }: { children: ReactNode; colorScheme: boolean }) => {
+export const ThemeProvider = ({ children, colorScheme = false }: { children: ReactNode; colorScheme?: boolean }) => {
   const [theme, setThemeState] = useState<string | null>(null);
   const [color, setColorState] = useState<string | null>(null);
 
@@ -26,7 +26,7 @@ export const ThemeProvider = ({ children, colorScheme = false }: { children: Rea
       if (savedColor) {
         setColorState(savedColor);
       } else {
-        setColorState(savedTheme === "dark" ? "red" : "green");
+        setColorState("red");
       }
     }
   }, []);

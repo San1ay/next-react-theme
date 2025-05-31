@@ -8,12 +8,15 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "prepublish": "pnpm build --filter react-next-theme"
+    "prepublishOnly": "pnpm build --filter next-react-theme"
   },
   "devDependencies": {
     "prettier": "^3.5.3",
     "turbo": "^2.5.3",
-    "typescript": "5.8.2"
+    "typescript": "5.8.2",
+    "@types/react": "^18.3.23",
+    "react": "^18.3.1",
+    "tsup": "8.5.0"
   },
   "repository": {
     "type": "git",
