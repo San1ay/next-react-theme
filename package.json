@@ -11,12 +11,16 @@
     "prepublishOnly": "pnpm build --filter next-react-theme"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19",
     "prettier": "^3.5.3",
-    "turbo": "^2.5.3",
-    "typescript": "5.8.2",
-    "@types/react": "^18.3.23",
     "react": "^18.3.1",
-    "tsup": "8.5.0"
+    "tailwindcss": "^4",
+    "tsup": "8.5.0",
+    "turbo": "^2.5.3",
+    "typescript": "5.8.2"
   },
   "repository": {
     "type": "git",

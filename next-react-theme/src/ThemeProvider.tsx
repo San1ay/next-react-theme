@@ -1,18 +1,19 @@
 "use client";
 
 import React from "react";
-import { createContext, useContext, useEffect, useState } from "react";
-import { setToLS, getFromLS, getAvailableColors } from "./utils";
+import { createContext, useLayoutEffect, useContext, useEffect, useState } from "react";
+import { setToLS, getFromLS, shadcnColors } from "./utils";
 import type { ThemeContextType, ThemeProviderType } from "./types";
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider = ({ children, colorScheme = false, colors }: ThemeProviderType) => {
+export const ThemeProvider = ({ children, colorScheme = false, colors: initialColors }: ThemeProviderType) => {
   const [theme, setThemeState] = useState<string | null>(null);
   const [color, setColorState] = useState<string | null>(null);
+  const [colors, setColors] = useState(initialColors || shadcnColors);
 
   // Initialize theme on mount
-  useEffect(() => {
+  useLayoutEffect(() => {
     const savedTheme = getFromLS("theme");
     if (savedTheme) {
       setThemeState(savedTheme);
@@ -22,16 +23,12 @@ export const ThemeProvider = ({ children, colorScheme = false, colors }: ThemePr
     }
 
     if (colorScheme) {
-      if (!!colors) colors = getAvailableColors();
-
       const savedColor = getFromLS("color");
       if (savedColor) {
         setColorState(savedColor);
-      } else {
-        setColorState("red");
-      }
+      } else setColorState("default");
     }
-  }, []);
+  }, [colorScheme]);
 
   // Side effects when theme changes
   useEffect(() => {
