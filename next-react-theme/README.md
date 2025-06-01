@@ -41,7 +41,7 @@ yarn install next-react-theme
 
 /* Remaining code */
 
-@import "next-react-theme/dist/themes.css";
+@import "next-react-theme/themes.css";
 
 @layer base {
   * {
@@ -80,9 +80,23 @@ Place this provider inside your root layout or `_app.tsx`.
 import { ThemeProvider } from "next-react-theme";
 
 export default function App({ children }) {
+  // Basic usage - only light/dark theme
+  return <ThemeProvider>{children}</ThemeProvider>;
+
+  // With color scheme support using default themes
   return <ThemeProvider colorScheme={true}>{children}</ThemeProvider>;
+
+  // With color scheme and custom colors
+  return <ThemeProvider colorScheme={true} colors={["red", "blue"]}>{children}</ThemeProvider>;
 }
 ```
+
+#### Props
+| Prop         | Type       | Default | Description                                    |
+|--------------|------------|---------|------------------------------------------------|
+| `children`   | `ReactNode`| -       | Children components                            |
+| `colorScheme`| `boolean`  | `false` | Enable color scheme support                    |
+| `colors`     | `string[]` | -       | Optional custom colors. If not provided when `colorScheme` is `true`, uses default themes: zinc, slate, stone, gray, neutral, red, rose, orange, green, blue, yellow, violet |
 
 ### 2. Access Theme
 
@@ -173,21 +187,29 @@ src/
 ```css
 /* Tailwind example */
 :root {
-  --accent: green; /* default fallback */
+    /* default fallback */
+  --primary: oklch(0.205 0 0);
+  --secondary: oklch(0.97 0 0);
+  --background: oklch(1 0 0);
 }
+
+.dark {
+  --primary: oklch(0.922 0 0);
+  --secondary: oklch(0.269 0 0);
+  --background: oklch(0.145 0 0);
 
 /* Light mode red theme */
 [data-theme="red"] {
-  --accent: red;
+  --primary: oklch(50.6% 0.201 29.5);
+  --secondary: oklch(96.1% 0 0);
   --background: oklch(98% 0.12 27);
-  --text: oklch(29% 0.12 27); 
 }
 
 /* Dark mode red theme */
 .dark[data-theme="red"] {
-  --accent: red;
+  --primary: oklch(50.6% 0.201 29.5);
+  --secondary: oklch(14.9% 0 0);
   --background: oklch(15% 0.05 27);
-  --text: oklch(95% 0.02 27); 
 }
 
 ```

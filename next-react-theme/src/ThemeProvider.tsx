@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { setToLS, getFromLS } from "./utils";
-import type { ThemeContextType } from "./types";
+import { createContext, useContext, useEffect, useState } from "react";
+import { setToLS, getFromLS, getAvailableColors } from "./utils";
+import type { ThemeContextType, ThemeProviderType } from "./types";
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider = ({ children, colorScheme = false }: { children: ReactNode; colorScheme?: boolean }) => {
+export const ThemeProvider = ({ children, colorScheme = false, colors }: ThemeProviderType) => {
   const [theme, setThemeState] = useState<string | null>(null);
   const [color, setColorState] = useState<string | null>(null);
 
@@ -22,6 +22,8 @@ export const ThemeProvider = ({ children, colorScheme = false }: { children: Rea
     }
 
     if (colorScheme) {
+      if (!!colors) colors = getAvailableColors();
+
       const savedColor = getFromLS("color");
       if (savedColor) {
         setColorState(savedColor);
@@ -58,7 +60,7 @@ export const ThemeProvider = ({ children, colorScheme = false }: { children: Rea
       value={{
         theme,
         setTheme,
-        ...(colorScheme ? { color, setColor } : {}),
+        ...(colorScheme ? { color, setColor, colors } : {}),
       }}
     >
       {children}
