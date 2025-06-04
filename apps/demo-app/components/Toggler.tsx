@@ -1,6 +1,8 @@
-const Toggler = ({ text, value, setValue }: { text: string; value: boolean; setValue: (value: boolean) => void }) => {
+import { twMerge } from "tailwind-merge";
+
+const Toggler = ({ text, value, setValue, className = "" }: { text: string; value: boolean; setValue: (value: boolean) => void; className?: string }) => {
   return (
-    <div className="flex items-center justify-between">
+    <div className={twMerge(`flex items-center justify-between`, className)}>
       <span className="text-sm font-semibold">{text}:</span>
       <button
         role="switch"

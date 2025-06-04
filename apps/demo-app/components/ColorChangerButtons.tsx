@@ -7,11 +7,11 @@ export default function ColorChangerButtons() {
 
   return (
     <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2 mt-3">
-      <AnimatePresence>
+      <AnimatePresence key={"color-changer"}>
         {colors &&
-          colors.map((color) => (
+          colors.map((color, idx) => (
             <motion.div
-              key={color}
+              key={`${color}-${idx}`}
               data-color={color}
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}

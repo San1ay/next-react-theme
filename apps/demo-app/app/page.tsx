@@ -1,12 +1,17 @@
 "use client";
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import ColorChangerButtons from "@/components/ColorChangerButtons";
 import ThemeToggle from "@/components/ThemeToggle";
 import Control from "@/components/Control";
 import CodePreview from "./CodePreview";
 import PackageLink from "./PackageLink";
+import { useState } from "react";
+import { useColorContext } from "./ColorContext";
+import DashboardOption from "./dashboard/DashboardOption";
 
 export default function Home() {
+  const { colorScheme } = useColorContext();
+
   return (
     <>
       <Control />
@@ -24,6 +29,7 @@ export default function Home() {
           </AnimatePresence>
         </div>
       </div>
+      {colorScheme && <DashboardOption />}
     </>
   );
 }
