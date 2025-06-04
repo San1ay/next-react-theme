@@ -1,1 +1,1 @@
-./next-react-theme/README.md
+packages/next-react-theme/README.md
