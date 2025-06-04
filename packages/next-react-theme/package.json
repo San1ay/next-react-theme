@@ -39,7 +39,7 @@
     "url": "git+https://github.com/San1ay/next-react-theme.git"
   },
   "peerDependencies": {
-    "react": "^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc"
+    "react": "^16.8 || ^17 || ^18 || ^19 "
   },
   "publishConfig": {
     "access": "public"

@@ -1,6 +1,7 @@
 {
   "files": [],
   "references": [
-    { "path": "next-react-theme" }
+    { "path": "next-react-theme" },
+    { "path": "example" }
   ]
 }

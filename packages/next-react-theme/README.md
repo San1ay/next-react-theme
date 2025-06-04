@@ -1,6 +1,8 @@
 # 🌗 ThemeProvider
 
-A lightweight and extensible **React context-based Theme Provider** for managing theme (`light` / `dark`) and optional color schemes (e.g., `"green"`, `"red"`, `"blue"`, `"yellow"`) with persistence in `localStorage`. Ideal for modern apps using Tailwind CSS or CSS variables with theme and color support — all with zero external dependencies.
+> <sub>⚠️ **SSR is not supported.** This package is intended for client-side usage only.</sub>
+
+A lightweight and extensible **React context-based Theme Provider** for managing theme (`light` / `dark`) and optional color schemes (e.g., `"green"`, `"red"`, `"blue"`, `"yellow"`) with persistence in `localStorage`. Ideal for modern apps using Tailwind CSS or CSS variables with theme and color support.
 
 ---
 
@@ -28,29 +30,18 @@ pnpm add next-react-theme
 yarn install next-react-theme
 ```
 ---
+---
 
+Check [🌐 **Live Demo App**](https://next-react-theme.vercel.app/) 
+
+---
 ## 🎨 Integration with shadcn/ui
 
 1. Import the themes CSS in your `global.css` above base:
 
 ```css
-@import "tailwindcss";
-@custom-variant dark (&:is(.dark *));
-@custom-variant red (&:is([data-theme="red"] *));
-@custom-variant dark-red (&:is(.dark[data-theme="red"] *));
-
-/* Remaining code */
-
 @import "next-react-theme/themes.css";
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
 ```
 
 This will add support for all shadcn/ui themes including:
@@ -131,7 +122,9 @@ const ThemeSwitcher = () => {
 | Prop         | Type        | Required | Description                                                                 |
 |--------------|-------------|----------|-----------------------------------------------------------------------------|
 | `children`   | `ReactNode` | ✅       | Children components                                                         |
-| `colorScheme`| `boolean`   | ✅       | Enable color scheme support. When `true`, sets a `data-color` attribute.   |
+| `colorScheme`| `boolean`   |          | Enable color scheme support. When `true`, sets a `data-color` attribute.    |
+| `colors?`    | `string[]`  |          | set available colors                                                        |
+
 
 ---
 
@@ -147,6 +140,7 @@ Returns theme context values.
 | `setTheme` | `(t: string) => void`| Function to update the theme                     |
 | `color?`   | `string`             | Current color scheme (`"red"`, `"green"`, etc.)  |
 | `setColor?`| `(c: string) => void`| Function to update color scheme (if enabled)     |
+| `colors?`  | `string[]`           | Available Colors if colorscheme enabled          |
 
 ---
 
@@ -221,9 +215,10 @@ src/
 ```ts
 export type ThemeContextType = {
   theme: string;
-  setTheme: (theme: string) => void;
-  color?: string;
-  setColor?: (color: string) => void;
+  setTheme: (newTheme: string) => void;
+  color?: string | null;
+  setColor?: (newColor: string) => void;
+  colors?: string[];
 };
 ```
 

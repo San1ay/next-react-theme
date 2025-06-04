@@ -10,7 +10,11 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider = ({ children, colorScheme = false, colors: initialColors }: ThemeProviderType) => {
   const [theme, setThemeState] = useState<string | null>(null);
   const [color, setColorState] = useState<string | null>(null);
-  const [colors, setColors] = useState(initialColors || shadcnColors);
+  const [colors, setColors] = useState(shadcnColors);
+
+  useEffect(() => {
+    initialColors?.length && setColors(initialColors);
+  }, [initialColors]);
 
   // Initialize theme on mount
   useLayoutEffect(() => {
@@ -39,7 +43,11 @@ export const ThemeProvider = ({ children, colorScheme = false, colors: initialCo
 
   // Side effects when color changes
   useEffect(() => {
-    if (!colorScheme || color === null) return;
+    if (!colorScheme || color === null) {
+      document.documentElement.setAttribute("data-color", "");
+      return;
+    }
+      
     document.documentElement.setAttribute("data-color", color);
     setToLS("color", color);
   }, [color, colorScheme]);
