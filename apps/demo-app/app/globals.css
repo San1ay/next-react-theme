@@ -2,7 +2,11 @@
 @import "next-react-theme/themes.css";
 @import "../lib/extendedThemes.css";
 
-/* @custom-variant dark (&:is(.dark *)); */
+@custom-variant dark (&:is(.dark *));
+
+html, body {
+  transition: background-color 0.5s ease-in, color 0.5s ease-in;
+}
 
 @theme inline {
   --color-background: var(--background);
