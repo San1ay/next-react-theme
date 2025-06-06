@@ -7,14 +7,9 @@ import type { ThemeContextType, ThemeProviderType } from "./types";
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider = ({ children, colorScheme = false, colors: initialColors }: ThemeProviderType) => {
+export const ThemeProvider = ({ children, colorScheme = false, colors = shadcnColors }: ThemeProviderType) => {
   const [theme, setThemeState] = useState<string | null>(null);
   const [color, setColorState] = useState<string | null>(null);
-  const [colors, setColors] = useState(shadcnColors);
-
-  useEffect(() => {
-    initialColors?.length && setColors(initialColors);
-  }, [initialColors]);
 
   // Initialize theme on mount
   useLayoutEffect(() => {
@@ -47,14 +42,18 @@ export const ThemeProvider = ({ children, colorScheme = false, colors: initialCo
       document.documentElement.setAttribute("data-color", "");
       return;
     }
-      
+
     document.documentElement.setAttribute("data-color", color);
     setToLS("color", color);
   }, [color, colorScheme]);
 
   // Expose setters that just update state, side effects handled by effects
   const setTheme = (newTheme: string) => setThemeState(newTheme);
-  const setColor = colorScheme ? (newColor: string) => setColorState(newColor) : undefined;
+  const setColor = (newColor: string) => {
+    if (colorScheme) {
+      setColorState(newColor);
+    }
+  };
 
   if (theme === null || (colorScheme && color === null)) {
     return null;
@@ -65,7 +64,9 @@ export const ThemeProvider = ({ children, colorScheme = false, colors: initialCo
       value={{
         theme,
         setTheme,
-        ...(colorScheme ? { color, setColor, colors } : {}),
+        color: color ?? "N/A",
+        setColor,
+        colors: colorScheme ? colors : [],
       }}
     >
       {children}

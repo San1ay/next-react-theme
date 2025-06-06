@@ -3,9 +3,9 @@ import { ReactNode } from "react";
 export interface ThemeContextType {
   theme: string;
   setTheme: (newTheme: string) => void;
-  color?: string | null;
-  setColor?: (newColor: string) => void;
-  colors?: string[];
+  color: string ;
+  setColor: (newColor: string) => void;
+  colors: string[];
 }
 
 export interface ThemeProviderType {

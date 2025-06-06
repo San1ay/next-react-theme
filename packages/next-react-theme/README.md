@@ -87,7 +87,7 @@ export default function App({ children }) {
 |--------------|------------|---------|------------------------------------------------|
 | `children`   | `ReactNode`| -       | Children components                            |
 | `colorScheme`| `boolean`  | `false` | Enable color scheme support                    |
-| `colors`     | `string[]` | -       | Optional custom colors. If not provided when `colorScheme` is `true`, uses default themes: zinc, slate, stone, gray, neutral, red, rose, orange, green, blue, yellow, violet |
+| `colors`     | `string[]` | shadcn Colors     | Optional custom colors. If not provided when `colorScheme` is `true`, uses default themes: zinc, slate, stone, gray, neutral, red, rose, orange, green, blue, yellow, violet |
 
 ### 2. Access Theme
 
@@ -122,7 +122,7 @@ const ThemeSwitcher = () => {
 | Prop         | Type        | Required | Description                                                                 |
 |--------------|-------------|----------|-----------------------------------------------------------------------------|
 | `children`   | `ReactNode` | ✅       | Children components                                                         |
-| `colorScheme`| `boolean`   |          | Enable color scheme support. When `true`, sets a `data-color` attribute.    |
+| `colorScheme?`| `boolean`   |          | Enable color scheme support. When `true`, sets a `data-color` attribute.    |
 | `colors?`    | `string[]`  |          | set available colors                                                        |
 
 
@@ -138,9 +138,9 @@ Returns theme context values.
 |------------|----------------------|---------------------------------------------------|
 | `theme`    | `string`             | Current theme (`"light"` or `"dark"`)            |
 | `setTheme` | `(t: string) => void`| Function to update the theme                     |
-| `color?`   | `string`             | Current color scheme (`"red"`, `"green"`, etc.)  |
-| `setColor?`| `(c: string) => void`| Function to update color scheme (if enabled)     |
-| `colors?`  | `string[]`           | Available Colors if colorscheme enabled          |
+| `color`   | `string`             | Current color applied (`"red"`, `"green"`, etc.)  |
+| `setColor`| `(c: string) => void`| Function to update color scheme (if enabled)     |
+| `colors`  | `string[]`           | Available Colors if colorscheme enabled          |
 
 ---
 
@@ -152,7 +152,7 @@ Returns theme context values.
 On first load:
 - Tries to load from `localStorage`
 - Falls back to system preference (`prefers-color-scheme`)
-- Sets `red` color as initial color
+
 
 ---
 
@@ -208,19 +208,6 @@ src/
 
 ```
 
----
-
-## 🔒 Type Definition (types.ts)
-
-```ts
-export type ThemeContextType = {
-  theme: string;
-  setTheme: (newTheme: string) => void;
-  color?: string | null;
-  setColor?: (newColor: string) => void;
-  colors?: string[];
-};
-```
 
 ---
 
