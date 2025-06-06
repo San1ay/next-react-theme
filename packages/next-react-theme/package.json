@@ -1,6 +1,6 @@
 {
   "name": "next-react-theme",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A flexible theme provider for Next.js and react applications",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

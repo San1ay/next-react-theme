@@ -11,7 +11,7 @@ export default function ColorChangerButtons() {
         {colors &&
           colors.map((color, idx) => (
             <motion.div
-              key={`${color}-${idx}`}
+              key={color}
               data-color={color}
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
