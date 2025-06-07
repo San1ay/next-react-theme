@@ -11,6 +11,7 @@
     "prepublishOnly": "pnpm build --filter next-react-theme"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.4",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19.1.6",
