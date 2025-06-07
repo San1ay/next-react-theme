@@ -6,7 +6,7 @@ import type { ThemeContextType, ThemeProviderType } from "./types";
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider = ({ children, colorScheme = false, colors = shadcnColors }: ThemeProviderType) => {
+export const ThemeProvider = ({ children, colorScheme = false, colors = shadcnColors, disableTransition }: ThemeProviderType) => {
   const [theme, setTheme] = useState<string | null>(null);
   const [color, setColor] = useState<string | null>(null);
 
@@ -14,6 +14,11 @@ export const ThemeProvider = ({ children, colorScheme = false, colors = shadcnCo
   useLayoutEffect(() => {
     setTheme(getFromLS("theme") || "system");
     colorScheme && setColor(getFromLS("color") || "default");
+    if (!disableTransition) {
+      const transitionStyle = "background-color 0.5s ease-in, color 0.5s ease-in";
+      document.documentElement.style.transition = transitionStyle;
+      document.body.style.transition = transitionStyle;
+    }
   }, [colorScheme]);
 
   // Apply theme change

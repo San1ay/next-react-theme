@@ -12,4 +12,5 @@ export interface ThemeProviderType {
   children: ReactNode;
   colorScheme?: boolean;
   colors?: string[];
+  disableTransition?: boolean;
 }

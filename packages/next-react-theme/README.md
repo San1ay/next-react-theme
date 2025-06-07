@@ -74,20 +74,16 @@ export default function App({ children }) {
   // Basic usage - only light/dark theme
   return <ThemeProvider>{children}</ThemeProvider>;
 
-  // With color scheme support using default themes
+  // color scheme support using default themes
   return <ThemeProvider colorScheme={true}>{children}</ThemeProvider>;
 
-  // With color scheme and custom colors
+  // color scheme and custom colors
   return <ThemeProvider colorScheme={true} colors={["red", "blue"]}>{children}</ThemeProvider>;
+
+   // disabled transition
+  return <ThemeProvider colorScheme disableTransition>{children}</ThemeProvider>;
 }
 ```
-
-#### Props
-| Prop         | Type       | Default | Description                                    |
-|--------------|------------|---------|------------------------------------------------|
-| `children`   | `ReactNode`| -       | Children components                            |
-| `colorScheme`| `boolean`  | `false` | Enable color scheme support                    |
-| `colors`     | `string[]` | shadcn Colors     | Optional custom colors. If not provided when `colorScheme` is `true`, uses default themes: zinc, slate, stone, gray, neutral, red, rose, orange, green, blue, yellow, violet |
 
 ### 2. Access Theme
 
@@ -124,7 +120,7 @@ const ThemeSwitcher = () => {
 | `children`   | `ReactNode` | ✅       | Children components                                                         |
 | `colorScheme?`| `boolean`   |          | Enable color scheme support. When `true`, sets a `data-color` attribute.    |
 | `colors?`    | `string[]`  |          | set available colors                                                        |
-
+| `disableTransition?` | `boolean` | `false` | Set to `true` to disable smooth background and text color transitions. This makes theme changes instant, with no animation. Useful for accessibility or if you want immediate theme switching. |
 
 ---
 
@@ -215,7 +211,6 @@ src/
 
 - Ensure your HTML supports the `dark` class (e.g., Tailwind dark mode is set to `"class"`)
 - Use the `data-color` attribute in CSS for dynamic theming
-- SSR-safe usage recommended (fallback loading state: `return null` before context is ready)
 
 ---
 

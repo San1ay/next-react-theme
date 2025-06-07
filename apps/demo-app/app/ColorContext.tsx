@@ -14,13 +14,15 @@ interface ColorContextType {
   disabledColors: string[];
   setDisabledColors: React.Dispatch<React.SetStateAction<string[]>>;
   resetColors: () => void;
+  transition: boolean | null;
+  setTransition: (value: boolean) => void;
 }
 
 const ColorContext = createContext<ColorContextType | undefined>(undefined);
 
 export const ColorProvider = ({ children }: { children: React.ReactNode }) => {
-  const [colorScheme, setColorScheme] = useState(true);
-  const [extended, setExtended] = useState(false);
+  const [colorScheme, setColorScheme] = useState<boolean>(true);
+  const [extended, setExtended] = useState<boolean>(false);
   const [colors, setColors] = useState<string[]>([]);
   const [disabledColors, setDisabledColors] = useState<string[]>([]);
   const allColors = [...shadcnColors, ...extendedColors];
@@ -28,6 +30,12 @@ export const ColorProvider = ({ children }: { children: React.ReactNode }) => {
     setDisabledColors([]);
     setColors(extended ? allColors : shadcnColors);
   };
+
+  const [transition, setTransition] = useState<boolean | null>(() => {
+    if (typeof window === "undefined") return null;
+    const stored = localStorage.getItem("theme-transition");
+    return stored === "true" ? true : stored === "false" ? false : null;
+  });
 
   useEffect(() => {
     if (!extended) {
@@ -37,7 +45,15 @@ export const ColorProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [extended]);
 
-  return <ColorContext.Provider value={{ colorScheme, setColorScheme, colors, setColors, extended, setExtended, allColors, disabledColors, setDisabledColors,resetColors }}>{children}</ColorContext.Provider>;
+  useEffect(() => {
+    localStorage.setItem("theme-transition", String(transition));
+  }, [transition]);
+
+  return (
+    <ColorContext.Provider value={{ colorScheme, setColorScheme, colors, setColors, extended, setExtended, allColors, disabledColors, setDisabledColors, resetColors, transition, setTransition }}>
+      {children}
+    </ColorContext.Provider>
+  );
 };
 
 export const useColorContext = () => {
