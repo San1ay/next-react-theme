@@ -1,63 +1,39 @@
 "use client";
 
-import React from "react";
-import { createContext, useLayoutEffect, useContext, useEffect, useState } from "react";
-import { setToLS, getFromLS, shadcnColors } from "./utils";
+import React, { createContext, useLayoutEffect, useContext, useEffect, useState } from "react";
+import { getFromLS, setToLS, shadcnColors } from "./utils";
 import type { ThemeContextType, ThemeProviderType } from "./types";
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children, colorScheme = false, colors = shadcnColors }: ThemeProviderType) => {
-  const [theme, setThemeState] = useState<string | null>(null);
-  const [color, setColorState] = useState<string | null>(null);
+  const [theme, setTheme] = useState<string | null>(null);
+  const [color, setColor] = useState<string | null>(null);
 
-  // Initialize theme on mount
+  // Initialize theme and color on mount
   useLayoutEffect(() => {
-    const savedTheme = getFromLS("theme");
-    if (savedTheme) {
-      setThemeState(savedTheme);
-    } else {
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      setThemeState(prefersDark ? "dark" : "light");
-    }
-
-    if (colorScheme) {
-      const savedColor = getFromLS("color");
-      if (savedColor) {
-        setColorState(savedColor);
-      } else setColorState("default");
-    }
+    setTheme(getFromLS("theme") || "system");
+    colorScheme && setColor(getFromLS("color") || "default");
   }, [colorScheme]);
 
-  // Side effects when theme changes
+  // Apply theme change
   useEffect(() => {
-    if (theme === null) return;
-    document.documentElement.classList.toggle("dark", theme === "dark");
+    if (!theme) return;
+    const mediaPrefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+    const applyTheme = () => document.documentElement.classList.toggle("dark", theme === "dark" || (theme === "system" && mediaPrefersDark.matches));
+    applyTheme();
     setToLS("theme", theme);
+    if (theme === "system") mediaPrefersDark.addEventListener("change", applyTheme);
+    return () => mediaPrefersDark.removeEventListener("change", applyTheme);
   }, [theme]);
 
-  // Side effects when color changes
+  // Apply color changes
   useEffect(() => {
-    if (!colorScheme || color === null) {
-      document.documentElement.setAttribute("data-color", "");
-      return;
-    }
-
-    document.documentElement.setAttribute("data-color", color);
-    setToLS("color", color);
+    document.documentElement.setAttribute("data-color", color && colorScheme ? color : "");
+    if (color) setToLS("color", color);
   }, [color, colorScheme]);
 
-  // Expose setters that just update state, side effects handled by effects
-  const setTheme = (newTheme: string) => setThemeState(newTheme);
-  const setColor = (newColor: string) => {
-    if (colorScheme) {
-      setColorState(newColor);
-    }
-  };
-
-  if (theme === null || (colorScheme && color === null)) {
-    return null;
-  }
+  if (theme === null || (colorScheme && color === null)) return null;
 
   return (
     <ThemeContext.Provider
@@ -65,7 +41,7 @@ export const ThemeProvider = ({ children, colorScheme = false, colors = shadcnCo
         theme,
         setTheme,
         color: color ?? "N/A",
-        setColor,
+        setColor: colorScheme ? setColor : () => {},
         colors: colorScheme ? colors : [],
       }}
     >
@@ -75,7 +51,7 @@ export const ThemeProvider = ({ children, colorScheme = false, colors = shadcnCo
 };
 
 export const useTheme = (): ThemeContextType => {
-  const context = useContext(ThemeContext);
-  if (!context) throw new Error("useTheme must be used within ThemeProvider");
-  return context;
+  const ctx = useContext(ThemeContext);
+  if (!ctx) throw new Error("useTheme must be used within ThemeProvider");
+  return ctx;
 };
